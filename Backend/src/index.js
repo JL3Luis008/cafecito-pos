@@ -17,7 +17,9 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 // ─── Base de Datos ───────────────────────────────────────────────────────────
-connectDB();
+if (process.env.NODE_ENV !== 'test') {
+  connectDB();
+}
 
 // ─── CORS ────────────────────────────────────────────────────────────────────
 const allowedOrigins = process.env.CORS_ORIGIN
@@ -85,12 +87,14 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 // ─── Servidor ─────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log('\n☕ ─────────────────────────────────────');
-  console.log(`   Cafecito POS — Backend`);
-  console.log(`   http://localhost:${PORT}`);
-  console.log(`   Entorno: ${process.env.NODE_ENV}`);
-  console.log('─────────────────────────────────────────\n');
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log('\n☕ ─────────────────────────────────────');
+    console.log(`   Cafecito POS — Backend`);
+    console.log(`   http://localhost:${PORT}`);
+    console.log(`   Entorno: ${process.env.NODE_ENV}`);
+    console.log('─────────────────────────────────────────\n');
+  });
+}
 
 module.exports = app;

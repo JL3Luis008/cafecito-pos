@@ -65,7 +65,51 @@ const obtenerPerfil = async (req, res, next) => {
   }
 };
 
+const actualizarPerfil = async (req, res, next) => {
+  try {
+    const { nombre } = req.body;
+    const updates = {};
+    
+    if (nombre) updates.nombre = nombre;
+    if (req.file) updates.avatar = `/uploads/${req.file.filename}`;
+
+    const usuario = await Usuario.findByIdAndUpdate(
+      req.user.id,
+      updates,
+      { new: true, runValidators: true }
+    ).select('-password');
+
+    res.json({ success: true, data: usuario });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const cambiarPassword = async (req, res, next) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    
+    const usuario = await Usuario.findById(req.user.id).select('+password');
+    
+    // Verificar contraseña actual
+    const isMatch = await usuario.matchPassword(currentPassword);
+    if (!isMatch) {
+      return res.status(401).json({ success: false, error: 'La contraseña actual es incorrecta' });
+    }
+
+    // El hook pre('save') se encargará de encriptar la nueva
+    usuario.password = newPassword;
+    await usuario.save();
+
+    res.json({ success: true, message: 'Contraseña actualizada correctamente' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   login,
   obtenerPerfil,
+  actualizarPerfil,
+  cambiarPassword
 };

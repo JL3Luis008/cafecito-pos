@@ -28,6 +28,10 @@ const UsuarioSchema = new mongoose.Schema(
       enum: ['admin', 'cajero'],
       default: 'cajero',
     },
+    avatar: {
+      type: String,
+      default: null,
+    },
     activo: {
       type: Boolean,
       default: true,

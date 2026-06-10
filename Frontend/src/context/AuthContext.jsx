@@ -43,11 +43,26 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const updateProfile = async (formData) => {
+    const { data } = await api.put('/auth/perfil', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+    setUser(data.data);
+    return data;
+  };
+
+  const updatePassword = async (passwordData) => {
+    const { data } = await api.put('/auth/password', passwordData);
+    return data;
+  };
+
   const value = {
     user,
     role: user?.rol,
     login,
     logout,
+    updateProfile,
+    updatePassword,
     loading
   };
 
