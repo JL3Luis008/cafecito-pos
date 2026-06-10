@@ -23,7 +23,7 @@ const registrarVenta = async (req, res, next) => {
       return res.status(400).json({ success: false, errors: errors.array() });
     }
 
-    const { items, clienteId } = req.body;
+    const { items, clienteId, metodoPago, efectivoRecibido, cambio } = req.body;
 
     // Obtener productos activos de la BD (ignora precios del cliente)
     const productoIds = items.map((i) => i.productoId);
@@ -83,12 +83,19 @@ const registrarVenta = async (req, res, next) => {
       }
     }
 
+    // Calcular desglose de impuestos (IVA 16% incluido en el total)
+    const impuestos = parseFloat((totalFinal * (0.16 / 1.16)).toFixed(2));
+
     const venta = new Venta({
       items:   itemsVenta,
       subtotal: subtotalBruto,
+      impuestos,
       descuentoMonto,
       descuentoPorcentaje,
       total: totalFinal,
+      metodoPago: metodoPago || 'efectivo',
+      efectivoRecibido: efectivoRecibido || 0,
+      cambio: cambio || 0,
       cajero:  req.user?.id ?? null,
       cliente: clienteId   ?? null,
     });

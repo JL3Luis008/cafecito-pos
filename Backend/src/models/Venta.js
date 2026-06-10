@@ -41,6 +41,10 @@ const ventaSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
+    impuestos: {
+      type: Number,
+      default: 0, // IVA
+    },
     descuentoMonto: {
       type: Number,
       default: 0,
@@ -50,10 +54,23 @@ const ventaSchema = new mongoose.Schema(
       enum: [0, 5, 10, 15],
       default: 0,
     },
+    metodoPago: {
+      type: String,
+      enum: ['efectivo', 'tarjeta', 'transferencia'],
+      default: 'efectivo',
+    },
+    efectivoRecibido: {
+      type: Number,
+      default: 0,
+    },
+    cambio: {
+      type: Number,
+      default: 0,
+    },
     cajero: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Usuario',
-      default: null, // Sprint 4 lo hace requerido
+      default: null,
     },
     cliente: {
       type: mongoose.Schema.Types.ObjectId,

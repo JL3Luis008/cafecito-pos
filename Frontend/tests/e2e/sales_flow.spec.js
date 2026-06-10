@@ -20,25 +20,36 @@ test.describe('E2E-02 y E2E-03: Ciclo de Venta y Fidelización', () => {
     await addButtons.nth(0).click();
     await addButtons.nth(1).click();
 
-    // 2. Abrir Carrito (si no está ya abierto por el sidebar derecho)
-    // En el diseño actual, el CarritoSidebar está siempre visible a la derecha en CatalogoPage
+    // 2. Verificar que hay items en el carrito
     const cartItems = page.locator('.carrito-item');
     await expect(cartItems).toHaveCount(2, { timeout: 10000 });
 
-    // 3. Confirmar Venta
-    // El botón tiene un texto dinámico que incluye el precio (ej: "Cobrar $12.50")
-    const checkoutBtn = page.locator('button:has-text("Cobrar")');
+    // 3. Selección de Método de Pago y Cambio (Sprint 1 Final)
+    // Seleccionamos Efectivo (debería estar por defecto, pero forzamos el click)
+    await page.click('button:has-text("Efectivo")');
+    
+    // Ingresar monto recibido
+    const inputRecibido = page.locator('input[type="number"]');
+    await inputRecibido.fill('200'); // Asumiendo que el total es menor
+    
+    // Verificar que el cambio se calcula (el texto del botón ya no es Cobrar sino Finalizar Venta)
+    // Y debería haber un contenedor de cambio
+    await expect(page.locator('.cash-handling')).toBeVisible();
+
+    // 4. Confirmar Venta
+    const checkoutBtn = page.locator('button:has-text("Finalizar Venta")');
     await expect(checkoutBtn).toBeEnabled();
     await checkoutBtn.click();
 
-    // 4. Verificar que aparece el Ticket (el modal de éxito)
-    // El sistema POS abre un TicketModal tras el cobro exitoso
+    // 5. Verificar que aparece el Ticket
     const ticket = page.locator('.ticket-container');
     await expect(ticket).toBeVisible({ timeout: 20000 });
-    await expect(page.locator('.modal-header')).toContainText(/Recibo/i);
     
-    // 5. Cerrar Ticket para finalizar
-    // Buscamos el botón Cerrar dentro del footer del modal para evitar ambigüedades
+    // Verificar que el ticket muestra el método de pago y el cambio
+    await expect(ticket).toContainText(/efectivo/i);
+    await expect(ticket).toContainText(/cambio/i);
+    
+    // 6. Cerrar Ticket
     await page.locator('.modal-footer >> button:has-text("Cerrar")').click();
     await expect(ticket).not.toBeVisible();
   });

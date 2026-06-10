@@ -45,6 +45,11 @@ export default function TicketModal({ isOpen, onClose, venta }) {
             <span>Subtotal:</span>
             <span>${venta.subtotal?.toFixed(2)}</span>
           </div>
+
+          <div className="flex justify-between text-small text-gray-600 italic">
+            <span>IVA (16% incl.):</span>
+            <span>${venta.impuestos?.toFixed(2)}</span>
+          </div>
           
           {venta.descuentoMonto > 0 && (
             <div className="flex justify-between text-small font-bold" style={{ color: '#059669' }}>
@@ -57,6 +62,26 @@ export default function TicketModal({ isOpen, onClose, venta }) {
             <span>TOTAL:</span>
             <span>${total.toFixed(2)}</span>
           </div>
+
+          <div className="payment-details mt-4 p-2 bg-gray-50 rounded border border-gray-200">
+             <div className="flex justify-between text-xs font-bold uppercase">
+                <span>Método Pago:</span>
+                <span>{venta.metodoPago}</span>
+             </div>
+             {venta.metodoPago === 'efectivo' && (
+               <>
+                 <div className="flex justify-between text-small mt-1">
+                    <span>Efectivo Recibido:</span>
+                    <span>${venta.efectivoRecibido?.toFixed(2)}</span>
+                 </div>
+                 <div className="flex justify-between text-small font-bold text-blue-700">
+                    <span>Cambio:</span>
+                    <span>${venta.cambio?.toFixed(2)}</span>
+                 </div>
+               </>
+             )}
+          </div>
+
           <p className="text-center mt-4 font-bold">¡Gracias por su compra!</p>
         </div>
       </div>

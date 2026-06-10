@@ -190,6 +190,57 @@ describe('POST /api/ventas — Registro de Venta', () => {
 
     expect(res.status).toBe(401);
   });
+
+  it('[I-V18] Venta con pago en efectivo y cálculo de cambio → 201', async () => {
+    const prod = await crearProducto({ precio: 100 });
+
+    const reqBody = {
+      items: [{ productoId: prod._id.toString(), cantidad: 1 }],
+      metodoPago: 'efectivo',
+      efectivoRecibido: 150,
+      cambio: 50
+    };
+
+    const res = await request(app)
+      .post('/api/ventas')
+      .set('Authorization', `Bearer ${cajeroToken}`)
+      .send(reqBody);
+
+    expect(res.status).toBe(201);
+    expect(res.body.data.metodoPago).toBe('efectivo');
+    expect(res.body.data.efectivoRecibido).toBe(150);
+    expect(res.body.data.cambio).toBe(50);
+  });
+
+  it('[I-V19] Desglose automático de IVA (16%) → 201', async () => {
+    const prod = await crearProducto({ precio: 116 }); // 100 + 16 IVA
+
+    const res = await request(app)
+      .post('/api/ventas')
+      .set('Authorization', `Bearer ${cajeroToken}`)
+      .send({ items: [{ productoId: prod._id.toString(), cantidad: 1 }] });
+
+    expect(res.status).toBe(201);
+    // IVA = 116 * (0.16 / 1.16) = 16.00
+    expect(res.body.data.total).toBe(116.00);
+    expect(res.body.data.impuestos).toBe(16.00);
+  });
+
+  it('[I-V20] Venta con pago con tarjeta → 201', async () => {
+    const prod = await crearProducto({ precio: 50 });
+
+    const res = await request(app)
+      .post('/api/ventas')
+      .set('Authorization', `Bearer ${cajeroToken}`)
+      .send({ 
+        items: [{ productoId: prod._id.toString(), cantidad: 1 }],
+        metodoPago: 'tarjeta'
+      });
+
+    expect(res.status).toBe(201);
+    expect(res.body.data.metodoPago).toBe('tarjeta');
+    expect(res.body.data.cambio).toBe(0);
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
