@@ -24,4 +24,16 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+const authorize = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.rol)) {
+      return res.status(403).json({ 
+        success: false, 
+        error: `El rol '${req.user.rol}' no tiene permisos para acceder a esta ruta` 
+      });
+    }
+    next();
+  };
+};
+
+module.exports = { protect, authorize };

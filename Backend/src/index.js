@@ -12,6 +12,8 @@ const clienteRoutes  = require('./routes/clienteRoutes');
 const authRoutes     = require('./routes/authRoutes');
 const reporteRoutes  = require('./routes/reporteRoutes');
 const usuarioRoutes  = require('./routes/usuarioRoutes');
+const cajaRoutes     = require('./routes/cajaRoutes');
+const promocionRoutes = require('./routes/promocionRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -61,6 +63,8 @@ app.use('/api/clientes',  clienteRoutes);
 app.use('/api/auth',      authRoutes);
 app.use('/api/reportes',  reporteRoutes);
 app.use('/api/usuarios',  usuarioRoutes);
+app.use('/api/caja',      cajaRoutes);
+app.use('/api/promociones', promocionRoutes);
 
 // Rutas futuras (se activarán en sprints posteriores)
 // app.use('/api/reportes', reporteRoutes);  // Sprint 5

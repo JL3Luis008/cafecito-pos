@@ -5,8 +5,10 @@ import ProfileModal from './ProfileModal';
 
 const NAV_LINKS = [
   { to: '/catalogo',        label: 'Catálogo',   icon: '🧾', roles: ['admin', 'cajero'] },
+  { to: '/caja',            label: 'Caja',       icon: '💰', roles: ['admin', 'cajero'] },
   { to: '/admin/productos', label: 'Productos',  icon: '📦', roles: ['admin'] },
   { to: '/admin/usuarios',  label: 'Usuarios',   icon: '👥', roles: ['admin'] },
+  { to: '/admin/promociones', label: 'Promociones', icon: '🎁', roles: ['admin'] },
   { to: '/admin/reportes',  label: 'Reportes',   icon: '📊', roles: ['admin'] },
 ];
 
