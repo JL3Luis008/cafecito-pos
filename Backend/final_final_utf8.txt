@@ -1,0 +1,57 @@
+﻿
+> cafecito-pos-backend@1.0.0 test
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90mC:/Users/ASUS TUF GAMING/Desktop/Cafecito/cafecito-pos/Backend[39m
+
+[90mstdout[2m | tests/integration/clientes.integration.test.js
+[22m[39mÔùç injected env (5) from .env // tip: Ôîÿ enable debugging { debug: true }
+
+[90mstdout[2m | tests/integration/caja.integration.test.js
+[22m[39mÔùç injected env (5) from .env // tip: Ôîÿ enable debugging { debug: true }
+
+[90mstdout[2m | tests/integration/promociones.integration.test.js
+[22m[39mÔùç injected env (5) from .env // tip: Ôîÿ suppress logs { quiet: true }
+
+[90mstdout[2m | tests/integration/auth.integration.test.js
+[22m[39mÔùç injected env (5) from .env // tip: Ôîÿ multiple files { path: ['.env.local', '.env'] }
+
+[90mstdout[2m | tests/integration/productos.integration.test.js
+[22m[39mÔùç injected env (5) from .env // tip: Ôùê encrypted .env [www.dotenvx.com]
+
+[90mstdout[2m | tests/integration/usuarios.integration.test.js
+[22m[39mÔùç injected env (5) from .env // tip: Ôîÿ override existing { override: true }
+
+[90mstdout[2m | tests/integration/reportes.integration.test.js
+[22m[39mÔùç injected env (5) from .env // tip: Ôùê secrets for agents [www.dotenvx.com]
+
+[90mstdout[2m | tests/integration/ventas.integration.test.js
+[22m[39mÔùç injected env (5) from .env // tip: Ôùê secrets for agents [www.dotenvx.com]
+
+ [32mÔ£ô[39m tests/unit/descuento.test.js [2m([22m[2m16 tests[22m[2m)[22m[33m 1361[2mms[22m[39m
+ [32mÔ£ô[39m tests/unit/producto.test.js [2m([22m[2m7 tests[22m[2m)[22m[33m 1513[2mms[22m[39m
+ [32mÔ£ô[39m tests/unit/errorHandler.test.js [2m([22m[2m8 tests[22m[2m)[22m[33m 1311[2mms[22m[39m
+ [32mÔ£ô[39m tests/unit/checkRole.test.js [2m([22m[2m6 tests[22m[2m)[22m[33m 1342[2mms[22m[39m
+ [32mÔ£ô[39m tests/unit/models.test.js [2m([22m[2m8 tests[22m[2m)[22m[33m 1632[2mms[22m[39m
+ [32mÔ£ô[39m tests/integration/caja.integration.test.js [2m([22m[2m6 tests[22m[2m)[22m[33m 1876[2mms[22m[39m
+ [32mÔ£ô[39m tests/integration/promociones.integration.test.js [2m([22m[2m7 tests[22m[2m)[22m[33m 2035[2mms[22m[39m
+ [32mÔ£ô[39m tests/integration/reportes.integration.test.js [2m([22m[2m5 tests[22m[2m)[22m[33m 2686[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m GET /api/reportes/dashboard ÔÇö Estad├¡sticas[2m > [22m[I-R01] Admin accede al dashboard y recibe estad├¡sticas ÔåÆ 200 [33m 441[2mms[22m[39m
+ [32mÔ£ô[39m tests/integration/clientes.integration.test.js [2m([22m[2m8 tests[22m[2m)[22m[33m 3206[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m GET /api/clientes ÔÇö Listado y B├║squeda[2m > [22m[I-C01] Listar todos los clientes ÔåÆ 200 [33m 384[2mms[22m[39m
+ [32mÔ£ô[39m tests/integration/usuarios.integration.test.js [2m([22m[2m7 tests[22m[2m)[22m[33m 3434[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m GET /api/usuarios ÔÇö Listado de Personal[2m > [22m[I-U01] Admin lista a todos los usuarios ÔåÆ 200 [33m 374[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m POST /api/usuarios ÔÇö Crear de Usuario[2m > [22m[I-U03] Admin crea un nuevo cajero v├ílidamente [33m 315[2mms[22m[39m
+ [32mÔ£ô[39m tests/integration/auth.integration.test.js [2m([22m[2m9 tests[22m[2m)[22m[33m 3858[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m POST /api/auth/login[2m > [22m[I-A01] Credenciales v├ílidas ÔåÆ 200 con token JWT [33m 531[2mms[22m[39m
+ [32mÔ£ô[39m tests/integration/productos.integration.test.js [2m([22m[2m12 tests[22m[2m)[22m[33m 3941[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m GET /api/productos ÔÇö Listado[2m > [22m[I-P01] Listar productos activos por defecto [33m 381[2mms[22m[39m
+ [32mÔ£ô[39m tests/integration/ventas.integration.test.js [2m([22m[2m20 tests[22m[2m)[22m[33m 5575[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m POST /api/ventas ÔÇö Registro de Venta[2m > [22m[I-V01] Venta v├ílida sin cliente ÔåÆ 201 con folio CF-XXXXXX [33m 434[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m      Tests [22m [1m[32m119 passed[39m[22m[90m (119)[39m
+[2m   Start at [22m 13:17:54
+[2m   Duration [22m 8.28s[2m (transform 174ms, setup 14.06s, collect 7.03s, tests 33.77s, environment 9ms, prepare 4.66s)[22m
+

@@ -5,7 +5,7 @@ import {
 } from 'recharts';
 import { 
   TrendingUp, Users, DollarSign, 
-  AlertTriangle, Eye, Clock, Heart
+  AlertTriangle, Eye, Clock, Heart, Download
 } from 'lucide-react';
 import api from '../../api/axios';
 import Swal from 'sweetalert2';
@@ -23,7 +23,57 @@ export default function ReportesPage() {
   const [loading, setLoading] = useState(true);
   const [activeModal, setActiveModal] = useState(null); // 'stock', 'usuarios', 'hoy'
 
+  const downloadCSV = (data, filename) => {
+    if (!data || !data.length) return;
+    
+    // Generar cabeceras a partir de las llaves del primer objeto
+    const headers = Object.keys(data[0]).join(',');
+    const rows = data.map(item => {
+      return Object.values(item).map(val => {
+        // Escapar comas y limpiar valores
+        let cleanVal = val === null || val === undefined ? '' : String(val);
+        if (cleanVal.includes(',')) cleanVal = `"${cleanVal}"`;
+        return cleanVal;
+      }).join(',');
+    });
+    
+    const csvContent = [headers, ...rows].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    
+    link.setAttribute('href', url);
+    link.setAttribute('download', `${filename}_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const exportarResumenHoy = () => {
+    const dataExport = detalleHoy.map(v => ({
+      Folio: v.folio,
+      Fecha: new Date(v.createdAt).toLocaleDateString(),
+      Hora: new Date(v.createdAt).toLocaleTimeString(),
+      Cliente: v.cliente?.nombre || 'General',
+      Cajero: v.cajero?.nombre || 'N/A',
+      Metodo: v.metodoPago,
+      Total: v.total
+    }));
+    downloadCSV(dataExport, 'ventas_hoy');
+  };
+
+  const exportarRankingProductos = () => {
+    const dataExport = stats.topProductos.map(p => ({
+      Nombre: p.nombre,
+      Vendidos: p.vendidos,
+      Ingresos: p.ingresos
+    }));
+    downloadCSV(dataExport, 'ranking_productos');
+  };
+
   const fetchData = async () => {
+    setLoading(true);
     try {
       const [resStats, resTendencia, resCats, resUsers, resHoy, resClientes] = await Promise.all([
         api.get('/reportes/dashboard'),
@@ -41,6 +91,7 @@ export default function ReportesPage() {
       setDetalleHoy(resHoy.data.data);
       setClientes(resClientes.data.data);
     } catch (error) {
+      console.error(error);
       Swal.fire('Error', 'No se pudieron cargar los reportes detallados', 'error');
     } finally {
       setLoading(false);
@@ -48,8 +99,10 @@ export default function ReportesPage() {
   };
 
   useEffect(() => {
+
     fetchData();
   }, []);
+
 
   if (loading) {
     return (
@@ -184,8 +237,11 @@ export default function ReportesPage() {
 
       {/* Ranking de Productos */}
       <div className="card mt-4">
-        <div className="card-header">
+        <div className="card-header flex justify-between items-center">
           <h3>Ranking: Los 5 más solicitados</h3>
+          <button className="btn btn-outline btn-sm" onClick={exportarRankingProductos}>
+            <Download size={16} /> Exportar CSV
+          </button>
         </div>
         <div className="card-body">
           <div className="top-products-list">
@@ -294,6 +350,11 @@ export default function ReportesPage() {
           <div className="modal-box" style={{ maxWidth: 800 }}>
             <div className="modal-header">
               <h2 className="modal-title">Tickets de Hoy ({detalleHoy.length})</h2>
+              <div className="flex gap-2 mr-8">
+                <button className="btn btn-caramel btn-sm" onClick={exportarResumenHoy}>
+                  <Download size={14} /> Exportar CSV
+                </button>
+              </div>
               <button className="modal-close" onClick={() => setActiveModal(null)}>&times;</button>
             </div>
             <div className="modal-body">

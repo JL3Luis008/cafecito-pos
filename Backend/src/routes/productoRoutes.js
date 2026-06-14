@@ -9,13 +9,13 @@ const {
   editarProducto,
   toggleActivo,
   eliminarProducto,
+  actualizarStock
 } = require('../controllers/productoController');
 
 const router = Router();
 
 /**
  * Wrapper para pasar errores de Multer al errorHandler de Express.
- * (Express 5 ya propaga promesas, pero Multer usa callbacks internamente)
  */
 const uploadImagen = (req, res, next) => {
   upload.single('imagen')(req, res, (err) => {
@@ -46,6 +46,7 @@ router.get('/', protect, listarProductos);
 router.post('/', protect, checkRole(['admin']), uploadImagen, productoValidators, crearProducto);
 router.put('/:id', protect, checkRole(['admin']), uploadImagen, productoValidators, editarProducto);
 router.patch('/:id/toggle', protect, checkRole(['admin']), toggleActivo);
+router.patch('/:id/stock', protect, checkRole(['admin']), actualizarStock);
 router.delete('/:id', protect, checkRole(['admin']), eliminarProducto);
 
 module.exports = router;

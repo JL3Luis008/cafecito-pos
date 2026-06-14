@@ -12,15 +12,15 @@ const protect = async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       
       req.user = decoded; // { id, rol, iat, exp }
-      next();
+      return next();
     } catch (error) {
       console.error(error);
-      res.status(401).json({ success: false, error: 'No autorizado, token fallido' });
+      return res.status(401).json({ success: false, error: 'No autorizado, token fallido' });
     }
   }
 
   if (!token) {
-    res.status(401).json({ success: false, error: 'No autorizado, no hay token' });
+    return res.status(401).json({ success: false, error: 'No autorizado, no hay token' });
   }
 };
 

@@ -119,6 +119,32 @@ const toggleActivo = async (req, res, next) => {
   }
 };
 
+// ─── PATCH /api/productos/:id/stock ─────────────────────────────────────────
+const actualizarStock = async (req, res, next) => {
+  try {
+    const { cantidad } = req.body;
+    if (typeof cantidad !== 'number' || cantidad <= 0) {
+      return res.status(400).json({ success: false, error: 'Cantidad inválida para reabastecer' });
+    }
+
+    const producto = await Producto.findById(req.params.id);
+    if (!producto) {
+      return res.status(404).json({ success: false, error: 'Producto no encontrado' });
+    }
+
+    producto.stock += cantidad;
+    await producto.save();
+
+    res.json({
+      success: true,
+      mensaje: `Se agregaron ${cantidad} unidades a ${producto.nombre}`,
+      data: producto
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // ─── DELETE /api/productos/:id ───────────────────────────────────────────────
 const eliminarProducto = async (req, res, next) => {
   try {
@@ -126,15 +152,13 @@ const eliminarProducto = async (req, res, next) => {
     if (!producto) {
       return res.status(404).json({ success: false, error: 'Producto no encontrado' });
     }
-
-    // Sprint 2 agregará verificación de ventas; por ahora elimina directamente
     deleteImageFile(producto.imagen);
     await producto.deleteOne();
-
     res.json({ success: true, mensaje: 'Producto eliminado correctamente' });
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = { listarProductos, crearProducto, editarProducto, toggleActivo, eliminarProducto };
+module.exports = { listarProductos, crearProducto, editarProducto, toggleActivo, eliminarProducto, actualizarStock };
+

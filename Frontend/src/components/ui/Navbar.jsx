@@ -10,7 +10,9 @@ const NAV_LINKS = [
   { to: '/admin/usuarios',  label: 'Usuarios',   icon: '👥', roles: ['admin'] },
   { to: '/admin/promociones', label: 'Promociones', icon: '🎁', roles: ['admin'] },
   { to: '/admin/reportes',  label: 'Reportes',   icon: '📊', roles: ['admin'] },
+  { to: '/admin/historial', label: 'Historial',  icon: '📜', roles: ['admin'] },
 ];
+
 
 export default function Navbar() {
   const { user, logout } = useAuth();

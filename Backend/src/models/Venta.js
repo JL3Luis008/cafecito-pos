@@ -51,9 +51,18 @@ const ventaSchema = new mongoose.Schema(
     },
     descuentoPorcentaje: {
       type: Number,
-      enum: [0, 5, 10, 15],
+      enum: {
+        values: [0, 5, 10, 15],
+        message: '{VALUE} no es un porcentaje de descuento válido'
+      },
       default: 0,
     },
+    promocion: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Promocion',
+      default: null,
+    },
+
     metodoPago: {
       type: String,
       enum: ['efectivo', 'tarjeta', 'transferencia'],

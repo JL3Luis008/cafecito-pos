@@ -52,11 +52,22 @@ export default function TicketModal({ isOpen, onClose, venta }) {
           </div>
           
           {venta.descuentoMonto > 0 && (
-            <div className="flex justify-between text-small font-bold" style={{ color: '#059669' }}>
-              <span>Descuento Fidelidad ({venta.descuentoPorcentaje}%):</span>
-              <span>-${venta.descuentoMonto.toFixed(2)}</span>
+            <div className="flex flex-col text-small font-bold" style={{ color: '#059669' }}>
+               {venta.descuentoPorcentaje > 0 && (
+                 <div className="flex justify-between">
+                   <span>Fidelidad ({venta.descuentoPorcentaje}%):</span>
+                   <span>-${((venta.subtotal * (venta.descuentoPorcentaje/100))).toFixed(2)}</span>
+                 </div>
+               )}
+               {venta.promocion && (
+                 <div className="flex justify-between">
+                   <span>Promo: {venta.promocion.nombre}:</span>
+                   <span>-${(venta.descuentoMonto - (venta.subtotal * (venta.descuentoPorcentaje/100))).toFixed(2)}</span>
+                 </div>
+               )}
             </div>
           )}
+
 
           <div className="flex justify-between font-bold text-lg mt-1" style={{ borderTop: '2px dashed #000', paddingTop: '0.25rem' }}>
             <span>TOTAL:</span>

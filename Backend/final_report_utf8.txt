@@ -1,0 +1,97 @@
+﻿
+[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90mC:/Users/ASUS TUF GAMING/Desktop/Cafecito/cafecito-pos/Backend[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+[90mstdout[2m | tests/integration/auth.integration.test.js
+[22m[39mÔùç injected env (5) from .env // tip: Ôùê secrets for agents [www.dotenvx.com]
+
+[90mstdout[2m | tests/integration/ventas.integration.test.js
+[22m[39mÔùç injected env (5) from .env // tip: Ôîÿ enable debugging { debug: true }
+
+[90mstdout[2m | tests/integration/reportes.integration.test.js
+[22m[39mÔùç injected env (5) from .env // tip: Ôîÿ custom filepath { path: '/custom/path/.env' }
+
+[90mstdout[2m | tests/integration/promociones.integration.test.js
+[22m[39mÔùç injected env (5) from .env // tip: Ôîÿ multiple files { path: ['.env.local', '.env'] }
+
+[90mstdout[2m | tests/integration/usuarios.integration.test.js
+[22m[39mÔùç injected env (5) from .env // tip: Ôîÿ custom filepath { path: '/custom/path/.env' }
+
+[90mstdout[2m | tests/integration/productos.integration.test.js
+[22m[39mÔùç injected env (5) from .env // tip: Ôîÿ override existing { override: true }
+
+[90mstdout[2m | tests/integration/clientes.integration.test.js
+[22m[39mÔùç injected env (5) from .env // tip: Ôùê secrets for agents [www.dotenvx.com]
+
+[90mstdout[2m | tests/integration/caja.integration.test.js
+[22m[39mÔùç injected env (5) from .env // tip: Ôîü auth for agents [www.vestauth.com]
+
+ [32mÔ£ô[39m tests/unit/checkRole.test.js [2m([22m[2m6 tests[22m[2m)[22m[33m 1262[2mms[22m[39m
+ [32mÔ£ô[39m tests/unit/errorHandler.test.js [2m([22m[2m8 tests[22m[2m)[22m[33m 1192[2mms[22m[39m
+ [32mÔ£ô[39m tests/unit/descuento.test.js [2m([22m[2m16 tests[22m[2m)[22m[33m 1389[2mms[22m[39m
+ [32mÔ£ô[39m tests/unit/producto.test.js [2m([22m[2m7 tests[22m[2m)[22m[33m 1494[2mms[22m[39m
+ [32mÔ£ô[39m tests/unit/models.test.js [2m([22m[2m8 tests[22m[2m)[22m[33m 1771[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m Unit Tests ÔÇö Schemas & Hooks[2m > [22mUsuario Model[2m > [22m[U-S11] Debe hashear la contrase├▒a antes de guardar [33m 309[2mms[22m[39m
+ [32mÔ£ô[39m tests/integration/promociones.integration.test.js [2m([22m[2m7 tests[22m[2m)[22m[33m 1887[2mms[22m[39m
+ [32mÔ£ô[39m tests/integration/caja.integration.test.js [2m([22m[2m6 tests[22m[2m)[22m[33m 1941[2mms[22m[39m
+ [32mÔ£ô[39m tests/integration/reportes.integration.test.js [2m([22m[2m5 tests[22m[2m)[22m[33m 2885[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m GET /api/reportes/dashboard ÔÇö Estad├¡sticas[2m > [22m[I-R01] Admin accede al dashboard y recibe estad├¡sticas ÔåÆ 200 [33m 483[2mms[22m[39m
+ [32mÔ£ô[39m tests/integration/clientes.integration.test.js [2m([22m[2m8 tests[22m[2m)[22m[33m 3436[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m GET /api/clientes ÔÇö Listado y B├║squeda[2m > [22m[I-C01] Listar todos los clientes ÔåÆ 200 [33m 458[2mms[22m[39m
+ [32mÔ£ô[39m tests/integration/usuarios.integration.test.js [2m([22m[2m7 tests[22m[2m)[22m[33m 3664[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m GET /api/usuarios ÔÇö Listado de Personal[2m > [22m[I-U01] Admin lista a todos los usuarios ÔåÆ 200 [33m 462[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m POST /api/usuarios ÔÇö Crear de Usuario[2m > [22m[I-U03] Admin crea un nuevo cajero v├ílidamente [33m 382[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m POST /api/usuarios ÔÇö Crear de Usuario[2m > [22m[I-U04] Error al crear usuario con email duplicado ÔåÆ 400 [33m 312[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m PUT /api/usuarios/:id ÔÇö Actualizaci├│n[2m > [22m[I-U05] Admin actualiza datos de un usuario [33m 343[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m DELETE /api/usuarios/:id ÔÇö Desactivaci├│n L├│gica[2m > [22m[I-U06] Admin desactiva a un usuario (borrado l├│gico) [33m 311[2mms[22m[39m
+ [32mÔ£ô[39m tests/integration/auth.integration.test.js [2m([22m[2m9 tests[22m[2m)[22m[33m 4132[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m POST /api/auth/login[2m > [22m[I-A01] Credenciales v├ílidas ÔåÆ 200 con token JWT [33m 618[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m POST /api/auth/login[2m > [22m[I-A03] Password incorrecta ÔåÆ 401 [33m 387[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m GET /api/auth/me[2m > [22m[I-A06] Token v├ílido ÔåÆ 200 con perfil de usuario [33m 339[2mms[22m[39m
+ [32mÔ£ô[39m tests/integration/productos.integration.test.js [2m([22m[2m12 tests[22m[2m)[22m[33m 4270[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m GET /api/productos ÔÇö Listado[2m > [22m[I-P01] Listar productos activos por defecto [33m 443[2mms[22m[39m
+ [32mÔ£ô[39m tests/integration/ventas.integration.test.js [2m([22m[2m20 tests[22m[2m)[22m[33m 6154[2mms[22m[39m
+   [33m[2mÔ£ô[22m[39m POST /api/ventas ÔÇö Registro de Venta[2m > [22m[I-V01] Venta v├ílida sin cliente ÔåÆ 201 con folio CF-XXXXXX [33m 497[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m      Tests [22m [1m[32m119 passed[39m[22m[90m (119)[39m
+[2m   Start at [22m 13:36:51
+[2m   Duration [22m 8.74s[2m (transform 159ms, setup 13.74s, collect 6.37s, tests 35.48s, environment 6ms, prepare 3.90s)[22m
+
+[34m % [39m[2mCoverage report from [22m[33mv8[39m
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   87.76 |    71.98 |   83.33 |   87.76 |                   
+ config            |      70 |       50 |       0 |      70 |                   
+  multer.js        |      70 |       50 |       0 |      70 | 12-13,18-20,25-31 
+ controllers       |   80.37 |    64.15 |   86.48 |   80.37 |                   
+  ...Controller.js |   63.47 |       80 |      60 |   63.47 | ...5,69-85,89-107 
+  ...Controller.js |   94.11 |     64.7 |     100 |   94.11 | 31-32,80-81,98-99 
+  ...Controller.js |   91.17 |       75 |     100 |   91.17 | 23-24,49-50,64-65 
+  ...Controller.js |   70.55 |    57.57 |   85.71 |   70.55 | ...53-154,159-160 
+  ...Controller.js |   68.42 |    54.54 |      80 |   68.42 | ...29,38-39,43-54 
+  ...Controller.js |   85.08 |    38.46 |      80 |   85.08 | ...48-149,154-172 
+  ...Controller.js |   83.16 |    36.84 |     100 |   83.16 | ...69,78-79,92-93 
+  ...Controller.js |   85.63 |    84.61 |     100 |   85.63 | ...55-166,177-178 
+ middleware        |   96.61 |    87.23 |     100 |   96.61 |                   
+  auth.js          |     100 |      100 |     100 |     100 |                   
+  checkRole.js     |     100 |      100 |     100 |     100 |                   
+  errorHandler.js  |   93.33 |    78.57 |     100 |   93.33 | 35-36,40-41       
+ models            |   99.46 |      100 |     100 |   99.46 |                   
+  Cliente.js       |     100 |      100 |     100 |     100 |                   
+  CorteCaja.js     |     100 |      100 |     100 |     100 |                   
+  Producto.js      |     100 |      100 |     100 |     100 |                   
+  Promocion.js     |   95.91 |      100 |     100 |   95.91 | 45-46             
+  Usuario.js       |     100 |      100 |     100 |     100 |                   
+  Venta.js         |     100 |      100 |     100 |     100 |                   
+ routes            |     100 |     90.9 |     100 |     100 |                   
+  authRoutes.js    |     100 |      100 |     100 |     100 |                   
+  cajaRoutes.js    |     100 |      100 |     100 |     100 |                   
+  clienteRoutes.js |     100 |      100 |     100 |     100 |                   
+  ...uctoRoutes.js |     100 |       75 |     100 |     100 | 22                
+  ...cionRoutes.js |     100 |      100 |     100 |     100 |                   
+  reporteRoutes.js |     100 |      100 |     100 |     100 |                   
+  usuarioRoutes.js |     100 |      100 |     100 |     100 |                   
+  ventaRoutes.js   |     100 |      100 |     100 |     100 |                   
+-------------------|---------|----------|---------|---------|-------------------

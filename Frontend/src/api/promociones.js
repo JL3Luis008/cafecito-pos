@@ -5,6 +5,12 @@ export const getPromociones = async () => {
   return response.data;
 };
 
+export const getPromocionesVigentes = async () => {
+  const response = await axios.get('/promociones/vigentes');
+  return response.data;
+};
+
+
 export const crearPromocion = async (promoData) => {
   const response = await axios.post('/promociones', promoData);
   return response.data;

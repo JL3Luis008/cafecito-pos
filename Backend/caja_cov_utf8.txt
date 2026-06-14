@@ -1,0 +1,51 @@
+﻿
+[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90mC:/Users/ASUS TUF GAMING/Desktop/Cafecito/cafecito-pos/Backend[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+[90mstdout[2m | tests/integration/caja.integration.test.js
+[22m[39mÔùç injected env (5) from .env // tip: Ôùê encrypted .env [www.dotenvx.com]
+
+ [32mÔ£ô[39m tests/integration/caja.integration.test.js [2m([22m[2m6 tests[22m[2m)[22m[33m 1134[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 12:15:05
+[2m   Duration [22m 2.67s[2m (transform 28ms, setup 512ms, collect 381ms, tests 1.13s, environment 0ms, prepare 155ms)[22m
+
+[34m % [39m[2mCoverage report from [22m[33mv8[39m
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   54.94 |    80.76 |   17.39 |   54.94 |                   
+ config            |      70 |       50 |       0 |      70 |                   
+  multer.js        |      70 |       50 |       0 |      70 | 12-13,18-20,25-31 
+ controllers       |   29.65 |       75 |   11.42 |   29.65 |                   
+  ...Controller.js |   21.73 |      100 |       0 |   21.73 | ...5,69-85,89-107 
+  ...Controller.js |   94.11 |     64.7 |     100 |   94.11 | 31-32,80-81,98-99 
+  ...Controller.js |   23.52 |      100 |       0 |   23.52 | 6-24,29-41,46-65  
+  ...Controller.js |   23.57 |      100 |       0 |   23.57 | ...03-119,124-137 
+  ...Controller.js |   35.71 |      100 |       0 |   35.71 | ...19,23-29,33-39 
+  ...Controller.js |   18.78 |      100 |       0 |   18.78 | ...23-149,154-172 
+  ...Controller.js |   23.76 |      100 |       0 |   23.76 | ...34,39-69,74-93 
+  ...Controller.js |   16.45 |      100 |       0 |   16.45 | ...27-139,145-155 
+ middleware        |   38.13 |       75 |      75 |   38.13 |                   
+  auth.js          |    64.1 |       60 |     100 |    64.1 | 17-19,21-24,29-35 
+  checkRole.js     |   63.15 |      100 |     100 |   63.15 | 9-15              
+  errorHandler.js  |   13.33 |      100 |       0 |   13.33 | 6-57              
+ models            |   98.36 |       90 |   33.33 |   98.36 |                   
+  Cliente.js       |     100 |      100 |     100 |     100 |                   
+  CorteCaja.js     |     100 |      100 |     100 |     100 |                   
+  Producto.js      |     100 |      100 |     100 |     100 |                   
+  Promocion.js     |   95.91 |      100 |     100 |   95.91 | 45-46             
+  Usuario.js       |   93.75 |    66.66 |       0 |   93.75 | 54,59-61          
+  Venta.js         |     100 |      100 |     100 |     100 |                   
+ routes            |   97.94 |      100 |       0 |   97.94 |                   
+  authRoutes.js    |     100 |      100 |     100 |     100 |                   
+  cajaRoutes.js    |     100 |      100 |     100 |     100 |                   
+  clienteRoutes.js |     100 |      100 |     100 |     100 |                   
+  ...uctoRoutes.js |   92.15 |      100 |       0 |   92.15 | 21-24             
+  ...cionRoutes.js |     100 |      100 |     100 |     100 |                   
+  reporteRoutes.js |     100 |      100 |     100 |     100 |                   
+  usuarioRoutes.js |     100 |      100 |     100 |     100 |                   
+  ventaRoutes.js   |     100 |      100 |     100 |     100 |                   
+-------------------|---------|----------|---------|---------|-------------------

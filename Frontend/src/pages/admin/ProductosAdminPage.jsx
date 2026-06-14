@@ -16,7 +16,10 @@ export default function ProductosAdminPage() {
   const [editTarget,   setEditTarget]   = useState(null); // null = crear
   const [filtro,       setFiltro]       = useState('all');
   const [busqueda,     setBusqueda]     = useState('');
-  const formRef = useRef(null); // ref al elemento <form> dentro de ProductoForm
+  const [stockModalOpen, setStockModalOpen] = useState(false);
+  const [stockTarget,    setStockTarget]    = useState(null);
+  const [stockAmount,    setStockAmount]    = useState(1);
+  const formRef = useRef(null); 
 
   // ── Fetch ────────────────────────────────────────────────────
   const fetchProductos = async () => {
@@ -135,6 +138,27 @@ export default function ProductosAdminPage() {
       fetchProductos();
     } catch (err) {
       Swal.fire('Error', err.displayMessage, 'error');
+    }
+  };
+
+  const abrirStock = (producto) => {
+    setStockTarget(producto);
+    setStockAmount(1);
+    setStockModalOpen(true);
+  };
+
+  const handleStockUpdate = async () => {
+    if (stockAmount <= 0) return;
+    setSaving(true);
+    try {
+      await api.patch(`/productos/${stockTarget._id}/stock`, { cantidad: Number(stockAmount) });
+      Swal.fire({ icon: 'success', title: 'Stock actualizado', timer: 1500, showConfirmButton: false });
+      setStockModalOpen(false);
+      fetchProductos();
+    } catch (err) {
+      Swal.fire('Error', err.displayMessage ?? 'Error al actualizar', 'error');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -266,6 +290,13 @@ export default function ProductosAdminPage() {
                   <td>
                     <div className="flex gap-2">
                       <button
+                        className="btn btn-caramel btn-sm"
+                        onClick={() => abrirStock(p)}
+                        title="Reabastecer Stock"
+                      >
+                        📦+
+                      </button>
+                      <button
                         className="btn btn-outline btn-sm"
                         onClick={() => abrirEditar(p)}
                         title="Editar"
@@ -330,6 +361,43 @@ export default function ProductosAdminPage() {
             loading={saving}
             serverError={serverError}
           />
+      </Modal>
+
+      {/* Modal Reabastecer Stock */}
+      <Modal
+        isOpen={stockModalOpen}
+        onClose={() => setStockModalOpen(false)}
+        title={`📦 Reabastecer — ${stockTarget?.nombre}`}
+        footer={
+          <>
+            <button className="btn btn-outline" onClick={() => setStockModalOpen(false)}>
+              Cancelar
+            </button>
+            <button 
+              className="btn btn-caramel" 
+              onClick={handleStockUpdate}
+              disabled={saving || stockAmount <= 0}
+            >
+              {saving ? '⏳ Actualizando...' : '➕ Agregar al Stock'}
+            </button>
+          </>
+        }
+      >
+        <div className="form-group p-2">
+          <label className="form-label">Cantidad a agregar:</label>
+          <input 
+            type="number" 
+            className="form-control text-lg font-bold" 
+            min="1"
+            value={stockAmount}
+            onChange={(e) => setStockAmount(parseInt(e.target.value) || 0)}
+            autoFocus
+          />
+          <p className="text-muted mt-2">
+            El stock actual es de <strong>{stockTarget?.stock}</strong> unidades. 
+            Pasará a ser <strong>{(stockTarget?.stock || 0) + (parseInt(stockAmount) || 0)}</strong>.
+          </p>
+        </div>
       </Modal>
     </>
   );

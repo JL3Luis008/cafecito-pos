@@ -1,7 +1,10 @@
+import { useState, useEffect } from 'react';
 import { useCart } from '../../context/CartContext';
+import { getPromocionesVigentes } from '../../api/promociones';
 import api from '../../api/axios';
 import Swal from 'sweetalert2';
-import { useState } from 'react';
+
+
 import ClienteSelector from './ClienteSelector';
 import TicketModal from './TicketModal';
 
@@ -11,6 +14,7 @@ import TicketModal from './TicketModal';
 export default function CarritoSidebar() {
   const { 
     items, subtotal, discountPercent, discountAmount, total, 
+    promoDiscountAmount, promocionSeleccionada, setPromocionSeleccionada,
     agregarItem, restarItem, eliminarItem, limpiarCarrito,
     cliente, setCliente 
   } = useCart();
@@ -18,6 +22,19 @@ export default function CarritoSidebar() {
   const [procesando, setProcesando] = useState(false);
   const [ventaExitosa, setVentaExitosa] = useState(null);
   const [showTicket, setShowTicket] = useState(false);
+  const [promosVigentes, setPromosVigentes] = useState([]);
+
+  useEffect(() => {
+    const fetchPromos = async () => {
+      try {
+        const { data } = await getPromocionesVigentes();
+        setPromosVigentes(data);
+      } catch (err) {
+        console.error("Error cargando promos:", err);
+      }
+    };
+    fetchPromos();
+  }, []);
 
   const [metodoPago, setMetodoPago] = useState('efectivo');
   const [efectivoRecibido, setEfectivoRecibido] = useState('');
@@ -49,7 +66,9 @@ export default function CarritoSidebar() {
           cantidad: i.cantidad,
         })),
         clienteId: cliente ? cliente._id : null,
+        promocionId: promocionSeleccionada ? promocionSeleccionada._id : null,
         metodoPago,
+
         efectivoRecibido: parseFloat(efectivoRecibido) || 0,
         cambio: cambio
       };
@@ -130,6 +149,26 @@ export default function CarritoSidebar() {
       </div>
 
       <div className="carrito-footer">
+        {/* Selector de Promociones */}
+        <div className="promo-selector mb-4">
+          <label className="text-xs font-bold uppercase text-gray-500 mb-1 block">Promoción del Día</label>
+          <select 
+            className="form-control text-sm"
+            value={promocionSeleccionada?._id || ''}
+            onChange={(e) => {
+              const selected = promosVigentes.find(p => p._id === e.target.value);
+              setPromocionSeleccionada(selected || null);
+            }}
+          >
+            <option value="">Ninguna promoción aplicada</option>
+            {promosVigentes.map(p => (
+              <option key={p._id} value={p._id}>
+                🎁 {p.nombre} ({p.tipo === 'porcentaje' ? `-${p.valor}%` : `-$${p.valor}`})
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className="carrito-resumen-precios">
           <div className="carrito-resumen-row">
             <span>Subtotal</span>
@@ -137,9 +176,16 @@ export default function CarritoSidebar() {
           </div>
           
           {discountPercent > 0 && (
-            <div className="carrito-resumen-row text-success">
+            <div className="carrito-resumen-row text-success text-small">
               <span>Descuento Fidelidad ({discountPercent}%)</span>
-              <span>-${discountAmount.toFixed(2)}</span>
+              <span>-${(subtotal * (discountPercent/100)).toFixed(2)}</span>
+            </div>
+          )}
+
+          {promocionSeleccionada && (
+             <div className="carrito-resumen-row text-caramel text-small font-bold">
+              <span>Promo: {promocionSeleccionada.nombre}</span>
+              <span>-${promoDiscountAmount.toFixed(2)}</span>
             </div>
           )}
           

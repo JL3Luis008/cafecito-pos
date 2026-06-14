@@ -39,4 +39,20 @@ const eliminarPromocion = async (req, res, next) => {
   }
 };
 
-module.exports = { getPromociones, crearPromocion, actualizarPromocion, eliminarPromocion };
+const getPromocionesVigentes = async (req, res, next) => {
+  try {
+    const ahora = new Date();
+    const promos = await Promocion.find({
+      activo: true,
+      fechaInicio: { $lte: ahora },
+      fechaFin: { $gte: ahora }
+    }).sort({ valor: -1 }); // Priorizamos el descuento mayor
+    
+    res.json({ success: true, data: promos });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { getPromociones, crearPromocion, actualizarPromocion, eliminarPromocion, getPromocionesVigentes };
+
