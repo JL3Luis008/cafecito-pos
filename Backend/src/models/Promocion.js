@@ -23,16 +23,40 @@ const promocionSchema = new mongoose.Schema(
     },
     fechaInicio: {
       type: Date,
-      required: true
+      required: function() { return !this.esPermanente; }
     },
     fechaFin: {
       type: Date,
-      required: true
+      required: function() { return !this.esPermanente; }
+    },
+    esPermanente: {
+      type: Boolean,
+      default: false
     },
     activo: {
       type: Boolean,
       default: true
+    },
+    aplicacion: {
+      type: String,
+      enum: ['automatica', 'manual'],
+      default: 'manual'
+    },
+    criterio: {
+      type: String,
+      enum: ['general', 'cliente_frecuente'],
+      default: 'general'
+    },
+    minimoCompras: {
+      type: Number,
+      default: 0
+    },
+    maximoCompras: {
+      type: Number,
+      default: 0 // 0 = sin límite superior
     }
+
+
   },
   {
     timestamps: true,
@@ -42,8 +66,11 @@ const promocionSchema = new mongoose.Schema(
 
 // Middleware para verificar si la promo está expirada antes de devolverla
 promocionSchema.virtual('estaVigente').get(function() {
+  if (!this.activo) return false;
+  if (this.esPermanente) return true;
   const ahora = new Date();
-  return this.activo && ahora >= this.fechaInicio && ahora <= this.fechaFin;
+  return ahora >= this.fechaInicio && ahora <= this.fechaFin;
 });
+
 
 module.exports = mongoose.model('Promocion', promocionSchema);

@@ -5,10 +5,13 @@ import {
 } from 'recharts';
 import { 
   TrendingUp, Users, DollarSign, 
-  AlertTriangle, Eye, Clock, Heart, Download
+  AlertTriangle, Eye, Clock, Heart, Download,
+  Calendar, Search
 } from 'lucide-react';
 import api from '../../api/axios';
 import Swal from 'sweetalert2';
+import { getHistorialVentas } from '../../api/ventas';
+import TicketModal from '../../components/ventas/TicketModal';
 
 const COLORS = ['#2C1810', '#C8860A', '#6B3A23', '#D4A77A', '#1D6830'];
 
@@ -21,7 +24,19 @@ export default function ReportesPage() {
   const [detalleHoy, setDetalleHoy] = useState([]);
   
   const [loading, setLoading] = useState(true);
-  const [activeModal, setActiveModal] = useState(null); // 'stock', 'usuarios', 'hoy'
+  const [activeModal, setActiveModal] = useState(null); // 'stock', 'usuarios', 'hoy', 'historico'
+
+  // Historial modal state
+  const [historialVentas, setHistorialVentas] = useState([]);
+  const [loadingHistorial, setLoadingHistorial] = useState(false);
+  const [filtrosHistorial, setFiltrosHistorial] = useState({
+    fechaInicio: '',
+    fechaFin: '',
+    cajero: '',
+    metodoPago: ''
+  });
+  const [selectedVenta, setSelectedVenta] = useState(null);
+  const [isTicketModalOpen, setIsTicketModalOpen] = useState(false);
 
   const downloadCSV = (data, filename) => {
     if (!data || !data.length) return;
@@ -103,6 +118,25 @@ export default function ReportesPage() {
     fetchData();
   }, []);
 
+  const fetchHistorial = async () => {
+    setLoadingHistorial(true);
+    try {
+      const res = await getHistorialVentas(filtrosHistorial);
+      setHistorialVentas(res.data);
+    } catch (error) {
+      console.error(error);
+      Swal.fire('Error', 'No se pudo cargar el historial', 'error');
+    } finally {
+      setLoadingHistorial(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeModal === 'historico') {
+      fetchHistorial();
+    }
+  }, [activeModal]);
+
 
   if (loading) {
     return (
@@ -142,14 +176,16 @@ export default function ReportesPage() {
           </div>
         </div>
 
-        <div className="stat-card">
+        <div className="stat-card cursor-pointer" onClick={() => setActiveModal('historico')}>
           <div className="stat-card__icon primary">
             <TrendingUp size={24} />
           </div>
           <div className="stat-card__content">
             <span className="stat-card__label">Inversión Ventas</span>
             <span className="stat-card__value">${stats.historico.total.toLocaleString()}</span>
-            <span className="text-small text-muted">Histórico acumulado</span>
+            <span className="text-small text-muted flex items-center gap-1">
+              Histórico acumulado <Eye size={12} />
+            </span>
           </div>
         </div>
 
@@ -389,6 +425,180 @@ export default function ReportesPage() {
           </div>
         </div>
       )}
+
+      {/* MODAL: HISTÓRICO ACUMULADO */}
+      {activeModal === 'historico' && (
+        <div className="modal-overlay">
+          <div className="modal-box" style={{ maxWidth: 1000, maxHeight: '90vh', overflowY: 'auto' }}>
+            <div className="modal-header">
+              <h2 className="modal-title">Histórico de Ventas</h2>
+              <div className="flex gap-2 mr-8">
+                <button className="btn btn-caramel btn-sm" onClick={() => {
+                  const dataExport = historialVentas.map(v => ({
+                    Folio: v.folio,
+                    Fecha: new Date(v.createdAt).toLocaleDateString(),
+                    Hora: new Date(v.createdAt).toLocaleTimeString(),
+                    Cajero: v.cajero?.nombre || 'N/A',
+                    Cliente: v.cliente?.nombre || 'General',
+                    Metodo: v.metodoPago,
+                    Total: v.total
+                  }));
+                  downloadCSV(dataExport, 'historico_ventas');
+                }}>
+                  <Download size={14} /> Exportar CSV
+                </button>
+              </div>
+              <button className="modal-close" onClick={() => setActiveModal(null)}>&times;</button>
+            </div>
+            <div className="modal-body">
+              {/* Filtros */}
+              <section className="bg-gray-50 p-4 rounded-xl mb-4">
+                <div className="flex flex-wrap items-end gap-4">
+                  <div className="form-group min-w-[180px]">
+                    <label className="text-xs font-bold text-gray-400 uppercase mb-1 block">Desde</label>
+                    <div className="relative">
+                      <input 
+                        type="date" 
+                        className="form-control pl-10" 
+                        value={filtrosHistorial.fechaInicio}
+                        onChange={(e) => setFiltrosHistorial({...filtrosHistorial, fechaInicio: e.target.value})}
+                      />
+                      <Calendar className="absolute left-3 top-2.5 text-gray-400" size={16} />
+                    </div>
+                  </div>
+                  <div className="form-group min-w-[180px]">
+                    <label className="text-xs font-bold text-gray-400 uppercase mb-1 block">Hasta</label>
+                    <div className="relative">
+                      <input 
+                        type="date" 
+                        className="form-control pl-10" 
+                        value={filtrosHistorial.fechaFin}
+                        onChange={(e) => setFiltrosHistorial({...filtrosHistorial, fechaFin: e.target.value})}
+                      />
+                      <Calendar className="absolute left-3 top-2.5 text-gray-400" size={16} />
+                    </div>
+                  </div>
+                  <div className="form-group min-w-[180px]">
+                    <label className="text-xs font-bold text-gray-400 uppercase mb-1 block">Cajero</label>
+                    <select 
+                      className="form-control"
+                      value={filtrosHistorial.cajero}
+                      onChange={(e) => setFiltrosHistorial({...filtrosHistorial, cajero: e.target.value})}
+                    >
+                      <option value="">Todos</option>
+                      {usuarios.map(u => (
+                        <option key={u._id} value={u._id}>{u.nombre}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="form-group min-w-[180px]">
+                    <label className="text-xs font-bold text-gray-400 uppercase mb-1 block">Método de Pago</label>
+                    <select 
+                      className="form-control"
+                      value={filtrosHistorial.metodoPago}
+                      onChange={(e) => setFiltrosHistorial({...filtrosHistorial, metodoPago: e.target.value})}
+                    >
+                      <option value="">Todos</option>
+                      <option value="efectivo">Efectivo</option>
+                      <option value="tarjeta">Tarjeta</option>
+                      <option value="transferencia">Transferencia</option>
+                    </select>
+                  </div>
+                  <div className="flex gap-2">
+                    <button className="btn btn-primary px-6 flex items-center gap-2" onClick={fetchHistorial}>
+                      <Search size={16} />
+                      Filtrar
+                    </button>
+                    <button 
+                      type="button" 
+                      className="btn btn-outline"
+                      onClick={() => {
+                        setFiltrosHistorial({ fechaInicio: '', fechaFin: '', cajero: '', metodoPago: '' });
+                        setTimeout(() => fetchHistorial(), 0);
+                      }}
+                    >
+                      Limpiar
+                    </button>
+                  </div>
+                </div>
+              </section>
+
+              {/* Tabla */}
+              <div className="table-responsive">
+                <table className="table w-full">
+                  <thead className="bg-gray-50 border-b border-gray-100">
+                    <tr>
+                      <th className="text-left p-3 text-xs font-bold text-gray-400 uppercase">Folio</th>
+                      <th className="text-left p-3 text-xs font-bold text-gray-400 uppercase">Fecha / Hora</th>
+                      <th className="text-left p-3 text-xs font-bold text-gray-400 uppercase">Cajero</th>
+                      <th className="text-left p-3 text-xs font-bold text-gray-400 uppercase">Cliente</th>
+                      <th className="text-left p-3 text-xs font-bold text-gray-400 uppercase">Método</th>
+                      <th className="text-right p-3 text-xs font-bold text-gray-400 uppercase">Total</th>
+                      <th className="text-center p-3 text-xs font-bold text-gray-400 uppercase">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50">
+                    {loadingHistorial ? (
+                      <tr>
+                        <td colSpan="7" className="p-8 text-center text-gray-500">
+                          <div className="flex flex-col items-center gap-2">
+                            <div className="spinner"></div>
+                            Cargando historial...
+                          </div>
+                        </td>
+                      </tr>
+                    ) : historialVentas.length === 0 ? (
+                      <tr>
+                        <td colSpan="7" className="p-8 text-center text-gray-400 italic">
+                          No se encontraron ventas para este periodo.
+                        </td>
+                      </tr>
+                    ) : historialVentas.map((venta) => (
+                      <tr key={venta._id} className="hover:bg-gray-50 transition-colors">
+                        <td className="p-3 font-black text-caramel">{venta.folio}</td>
+                        <td className="p-3 text-sm">
+                          {new Date(venta.createdAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
+                        </td>
+                        <td className="p-3 text-sm font-medium">{venta.cajero?.nombre || 'N/A'}</td>
+                        <td className="p-3 text-sm">{venta.cliente?.nombre || 'Venta General'}</td>
+                        <td className="p-3 capitalize">
+                          <span className={`badge ${venta.metodoPago === 'efectivo' ? 'badge-success' : 'badge-info'}`}>
+                            {venta.metodoPago === 'efectivo' ? '💵' : '💳'} {venta.metodoPago}
+                          </span>
+                        </td>
+                        <td className="p-3 text-right font-black text-gray-800">
+                          ${venta.total.toFixed(2)}
+                        </td>
+                        <td className="p-3">
+                          <div className="flex justify-center">
+                            <button 
+                              className="p-2 bg-mist hover:bg-caramel-lt rounded-xl text-caramel transition-all active:scale-90"
+                              onClick={() => {
+                                setSelectedVenta(venta);
+                                setIsTicketModalOpen(true);
+                              }}
+                              title="Ver Ticket"
+                            >
+                              <Eye size={18} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Detalle de Venta */}
+      <TicketModal 
+        isOpen={isTicketModalOpen} 
+        onClose={() => setIsTicketModalOpen(false)} 
+        venta={selectedVenta} 
+      />
 
       {/* MODAL: CLIENTES FIELES */}
       {activeModal === 'clientes' && (

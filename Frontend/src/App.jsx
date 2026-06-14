@@ -5,7 +5,6 @@ import ProductosAdminPage from './pages/admin/ProductosAdminPage';
 import UsuariosAdminPage from './pages/admin/UsuariosAdminPage';
 import ReportesPage from './pages/admin/ReportesPage';
 import PromocionesPage from './pages/admin/PromocionesPage';
-import HistorialVentasPage from './pages/admin/HistorialVentasPage';
 import CajaPage from './pages/caja/CajaPage';
 
 import LoginPage from './pages/auth/LoginPage';
@@ -45,7 +44,6 @@ export default function App() {
                   <Route path="/admin/usuarios" element={<UsuariosAdminPage />} />
                   <Route path="/admin/reportes" element={<ReportesPage />} />
                   <Route path="/admin/promociones" element={<PromocionesPage />} />
-                  <Route path="/admin/historial" element={<HistorialVentasPage />} />
                 </Route>
               </Route>
             </Route>

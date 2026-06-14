@@ -44,15 +44,18 @@ const getPromocionesVigentes = async (req, res, next) => {
     const ahora = new Date();
     const promos = await Promocion.find({
       activo: true,
-      fechaInicio: { $lte: ahora },
-      fechaFin: { $gte: ahora }
-    }).sort({ valor: -1 }); // Priorizamos el descuento mayor
+      $or: [
+        { esPermanente: true },
+        { fechaInicio: { $lte: ahora }, fechaFin: { $gte: ahora } }
+      ]
+    }).sort({ valor: -1 });
     
     res.json({ success: true, data: promos });
   } catch (error) {
     next(error);
   }
 };
+
 
 module.exports = { getPromociones, crearPromocion, actualizarPromocion, eliminarPromocion, getPromocionesVigentes };
 
