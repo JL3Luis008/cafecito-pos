@@ -6,6 +6,7 @@ const path = require('path');
 
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
+const runSeed = require('../seed');
 const productoRoutes = require('./routes/productoRoutes');
 const ventaRoutes    = require('./routes/ventaRoutes');
 const clienteRoutes  = require('./routes/clienteRoutes');
@@ -20,7 +21,11 @@ const PORT = process.env.PORT || 4000;
 
 // ─── Base de Datos ───────────────────────────────────────────────────────────
 if (process.env.NODE_ENV !== 'test') {
-  connectDB();
+  connectDB().then(() => {
+    if (process.env.RUN_SEED === 'true') {
+      runSeed();
+    }
+  });
 }
 
 // ─── CORS ────────────────────────────────────────────────────────────────────
